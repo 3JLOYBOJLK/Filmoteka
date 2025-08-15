@@ -1,5 +1,4 @@
 package com._3JLOYBOJLK;
-import java.time.Year;
 
 public class Movie {
     private String title;
@@ -10,11 +9,11 @@ public class Movie {
 
     public Movie(String title, int year, String director) {
 
-        this.title = MovieValidator.validateTitle(title);
+        this.title = Validators.validateTitle(title);
 
-        this.year = MovieValidator.validateYear(year);
+        this.year = Validators.validateYear(year);
 
-        this.director = MovieValidator.validateDirector(director);
+        this.director = Validators.validateDirector(director);
 
         this.genre = "Unknown";
         this.rating = 0.0;
@@ -22,51 +21,50 @@ public class Movie {
 
     public Movie(String title, int year, String director, String genre, double rating) {
 
-        this.title = MovieValidator.validateTitle(title);
+        this.title = Validators.validateTitle(title);
 
-        this.year = MovieValidator.validateYear(year);
+        this.year = Validators.validateYear(year);
 
-        this.director = MovieValidator.validateDirector(director);
+        this.director = Validators.validateDirector(director);
 
-        this.genre = MovieValidator.validateGenre(genre);
+        this.genre = Validators.validateGenre(genre);
 
-        this.rating = MovieValidator.validateRating(rating);
+        this.rating = Validators.validateRating(rating);
     }
 
     public String getTitle() {
         return title;
     }
     public void setTitle(String title) {
-        this.title = MovieValidator.validateTitle(title);
+        this.title = Validators.validateTitle(title);
     }
 
     public int getYear() {
         return year;
     }
     public void setYear(int year) {
-        this.year = MovieValidator.validateYear(year);
+        this.year = Validators.validateYear(year);
     }
 
     public String getDirector() {
         return director;
     }
-
     public void setDirector(String director) {
-        this.director = MovieValidator.validateDirector(director);
+        this.director = Validators.validateDirector(director);
     }
 
     public String getGenre() {
         return genre;
     }
     public void setGenre(String genre) {
-        this.genre = MovieValidator.validateGenre(genre);
+        this.genre = Validators.validateGenre(genre);
     }
 
     public double getRating() {
         return rating;
     }
     public void setRating(double rating) {
-        this.rating = MovieValidator.validateRating(rating);
+        this.rating = Validators.validateRating(rating);
     }
 
 
@@ -80,12 +78,12 @@ public class Movie {
                         "│ %-33s │\n" +
                         "│ %-33s │\n" +
                         "└───────────────────────────────────┘",
-                "🎬 " + MovieValidator.validateTitle(title),
-                "📅 " + MovieValidator.validateYear(year),
-                "🎥 " + MovieValidator.validateDirector(director),
-                ":D " + MovieValidator.validateGenre(genre),
-                "⭐ " + (MovieValidator.validateRating(rating)> 0 ?
-                        String.format("%.1f/10", MovieValidator.validateRating(rating)) : "N/A")
+                "🎬 " + Validators.validateTitle(title),
+                "📅 " + Validators.validateYear(year),
+                "🎥 " + Validators.validateDirector(director),
+                ":D " + Validators.validateGenre(genre),
+                "⭐ " + (Validators.validateRating(rating)> 0 ?
+                        String.format("%.1f/10", Validators.validateRating(rating)) : "N/A")
         );
     }
 
@@ -93,11 +91,11 @@ public class Movie {
 
     public String toCSVString() {
         return String.format("%s;%d;%s;%s;%.1f",
-                MovieValidator.validateTitle(title),
-                MovieValidator.validateYear(year),
-                MovieValidator.validateDirector(director),
-                MovieValidator.validateGenre(genre),
-                MovieValidator.validateRating(rating)
+                Validators.validateTitle(title),
+                Validators.validateYear(year),
+                Validators.validateDirector(director),
+                Validators.validateGenre(genre),
+                Validators.validateRating(rating)
         );
     }
 
