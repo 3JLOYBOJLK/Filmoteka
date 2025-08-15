@@ -1,6 +1,8 @@
 package com._3JLOYBOJLK;
 
+import javax.annotation.processing.FilerException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,49 +11,27 @@ public class App {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         CSVManager csvManager = new CSVManager();
+
+        // Проверяем существование файла перед загрузкой
+        File inputFile = new File("movies.csv");
+        if (!inputFile.exists()) {
+            System.out.println("Файл movies.csv не найден в: " + inputFile.getAbsolutePath());
+            System.out.println("Создаю новый список фильмов...");
+        }
+
         List<Movie> movies = csvManager.loadMoviesFromCSV("movies.csv");
 
-        for(Movie movie : movies){
-            System.out.println(movie);
-        }
+        // Вывод фильмов
+        movies.forEach(System.out::println);
 
-        //вынести в отдельный метод
+        // Сохранение
         System.out.println("Input nameOfFile, where you want save: ");
-        int flag = 0;
-        while(flag!=1){
-            String fileForCSVSave = sc.nextLine().trim();
-            int lengthFileName = fileForCSVSave.length();
-           if(fileForCSVSave.toLowerCase().endsWith(".csv")){
-               File file = new File(fileForCSVSave);
-               flag = 1;
-               break;
-           }
-           else if(fileForCSVSave.endsWith(".")){
-               File file = new File(fileForCSVSave+"csv");
-               flag = 1;
-               break;
-           }
-           else if(fileForCSVSave.contains(".")&& !fileForCSVSave.endsWith(".")){
-               File file = new File(fileForCSVSave+".csv");
-               flag = 1;
-               break;
-           }
-           else {
-               File file = new File(fileForCSVSave+".csv");
-               flag = 1;
-               break;
-           }
+        String myFile = Validators.validateFile(sc);
+        csvManager.saveMoviesToCSV(movies, myFile);
 
-
-
-
-        }
-
-        csvManager.saveMoviesToCSV(movies, fileForCSVSave);
-        List<Movie> moviesFromCSV = csvManager.loadMoviesFromCSV(fileForCSVSave);
-
-        for(Movie movie: moviesFromCSV){
-            System.out.println(movie);
-        }
+        // Проверка сохранения
+        System.out.println("Проверка загрузки сохраненного файла:");
+        List<Movie> loadedMovies = csvManager.loadMoviesFromCSV(myFile);
+        loadedMovies.forEach(System.out::println);
     }
 }
