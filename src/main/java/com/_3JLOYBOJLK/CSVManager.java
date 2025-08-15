@@ -6,55 +6,51 @@ import java.util.List;
 
 public class CSVManager {
 
-    public static List<Movie> loadMoviesFromCSV(String fileName){
-        List<Movie> takeMovies = new ArrayList<Movie>();
-        try {
-            InputStream giveAccess = CSVManager.class.getResourceAsStream("/"+ fileName);
+    public static List<Movie> loadMoviesFromCSV(String fileName) {
+        List<Movie> movies = new ArrayList<>();
+        File file = new File(fileName);
 
-            if (giveAccess == null) {
-                System.out.println("File not found");
-                return new ArrayList<>();
-            }
-            try {
-                BufferedReader br = new BufferedReader(new InputStreamReader(giveAccess));
-
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    String[] data = line.split(";");
-                    if (data.length > 0 && data.length <= 5) {
-
-                        String title = data[0].trim();
-                        int year = Integer.parseInt(data[1].trim());
-                        String director = data[2].trim();
-                        String genre = data[3].trim();
-                        double rating = Double.parseDouble(data[4].trim());
-
-                        takeMovies.add(new Movie(title, year, director, genre, rating));
-                    }
-                }
-                br.close();
-            } catch (IOException | NumberFormatException e) {
-                throw new RuntimeException("Failed to load movies from %s" + fileName, e);
-            }
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
-        return takeMovies;
+        if (!file.exists()) {
+            System.err.println("Файл не найден: " + file.getAbsolutePath());
+            return movies;
         }
 
-        public static void saveMoviesToCSV(List<Movie> movies, String fileName){
-            try{
-                FileWriter file = new FileWriter(fileName);
-                while(movies!=null){
-                    file.write(movies.toString()+";");
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            br.readLine();
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                String[] data = line.split(";");
+                if (data.length == 5) {
+                    String title = data[0].trim();
+                    int year = Integer.parseInt(data[1].trim());
+                    String director = data[2].trim();
+                    String genre = data[3].trim().equals("N/A") ? null : data[3].trim();
+                    double rating = Double.parseDouble(data[4].trim());
+
+                    movies.add(new Movie(title, year, director, genre, rating));
                 }
             }
-            catch (IOException e){
-                throw new RuntimeException("Failed to save movie to %s" + fileName, e);
-            }
-
-
-
+        } catch (IOException | NumberFormatException e) {
+            throw new RuntimeException("Failed to load movies from " + fileName, e);
         }
+        return movies;
+    }
+
+    public static void saveMoviesToCSV(List<Movie> movies, String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write("Title;Year;Director;Genre;Rating\n"); // Исправлен разделитель
+
+            for (Movie movie : movies) {
+                writer.write(movie.toCSVString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            new File(fileName).delete();
+            throw new RuntimeException("Failed to save movies to " + fileName, e);
+        }
+    }
 }
