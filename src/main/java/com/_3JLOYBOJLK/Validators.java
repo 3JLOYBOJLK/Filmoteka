@@ -13,7 +13,7 @@ public class Validators {
 
     public static int validateYear(int year) {
         int currentYear = Year.now().getValue();
-        return (year >= 1950 && year <= currentYear) ? year : 1950;
+        return (year >= 1930 && year <= currentYear) ? year : 1930;
     }
 
     public static String validateDirector(String director) {
@@ -31,23 +31,36 @@ public class Validators {
     public static String validateFile(Scanner sc) {
         while (true) {
             String input = sc.nextLine().trim();
+
             if (input.isEmpty()) {
                 System.out.println("Filename cannot be empty. Try again.");
                 continue;
             }
-            String formatingName = formatFileName(input.trim());
-            try {
-                File file = new File(formatingName);
-                if (file.exists()) {
-                    System.out.println("File already exists. He will be overwritten.");
-                }
-                return formatingName;
-            } catch (Exception e) {
-                System.out.println("Invalid filename or path. Try again:");
+
+            if(containtsInvalidSymbols(input)){
+                System.out.println("Filename contains invalid symbols. Try again:");
+                continue;
             }
+
+            String formatingName = formatFileName(input);
+            File file = new File(formatingName);
+
+            if (file.exists()) {
+                System.out.println("File already exists. He will be overwritten.");
+            }
+            return formatingName;
         }
     }
 
+    private static boolean containtsInvalidSymbols(String filename){
+        char[] invalidSymbols ={'<', '>', ':', '"', '/', '\\', '|', '?', '*'};
+        for (char ch : invalidSymbols ) {
+            if (filename.contains(String.valueOf(ch))) {
+                return true;
+            }
+        }
+        return false;
+    }
     private static String formatFileName(String fileName) {
 
         if (fileName.toLowerCase().endsWith(".csv")) {

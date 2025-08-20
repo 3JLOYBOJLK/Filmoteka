@@ -30,7 +30,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com._3JLOYBOJLK.App</mainClass>
+                    <mainClass>com._3JLOYBOJLK.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
