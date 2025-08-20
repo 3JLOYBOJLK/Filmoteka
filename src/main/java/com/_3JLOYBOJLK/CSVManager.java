@@ -16,7 +16,6 @@ public class CSVManager {
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            br.readLine();
 
             String line;
             while ((line = br.readLine()) != null) {
@@ -29,7 +28,7 @@ public class CSVManager {
                     int year = Integer.parseInt(data[1].trim());
                     String director = data[2].trim();
                     String genre = data[3].trim().equals("N/A") ? null : data[3].trim();
-                    double rating = Double.parseDouble(data[4].trim());
+                    double rating = Double.parseDouble(data[4].trim().replace(",","."));
 
                     movies.add(new Movie(title, year, director, genre, rating));
                 }
@@ -42,7 +41,6 @@ public class CSVManager {
 
     public static void saveMoviesToCSV(List<Movie> movies, String fileName) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write("Title;Year;Director;Genre;Rating\n"); // Исправлен разделитель
 
             for (Movie movie : movies) {
                 writer.write(movie.toCSVString());
