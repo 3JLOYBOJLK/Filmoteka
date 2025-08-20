@@ -1,8 +1,104 @@
 package com._3JLOYBOJLK;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 
 public class MovieCollection {
-    List<Movie> movies = new ArrayList<Movie>();
+    private List<Movie> movies;
+    private CSVManager csvManager;
+
+    public MovieCollection() {
+        this.movies = new ArrayList<>();
+        this.csvManager = new CSVManager();
+    }
+    public List<Movie> getMovies() {
+        return Collections.unmodifiableList(new ArrayList<>(movies));
+    }
+
+    public void loadFromFile(String filename) {
+        this.movies = csvManager.loadMoviesFromCSV(filename);
+    }
+
+    public void saveToFile(String filename) {
+        csvManager.saveMoviesToCSV(movies, filename);
+    }
+    public boolean addMovie(Movie newMovie) {
+        if (newMovie == null) {
+            throw new IllegalArgumentException("Movie cannot be null");
+        }
+
+        if (isMovieExists(newMovie)) {
+            System.out.println("Movie '" + newMovie.getTitle() +
+                    "' (" + newMovie.getYear() + ") already exists in collection");
+            return false;
+        }
+
+        movies.add(newMovie);
+        System.out.println("Movie '" + newMovie.getTitle() +
+                "' (" + newMovie.getYear() + ") successfully added");
+        return true;
+    }
+
+    private boolean isMovieExists(Movie movie) {
+        for (Movie currentMovie : movies) {
+            if (currentMovie.getTitle().equalsIgnoreCase(movie.getTitle()) &&
+                    currentMovie.getYear() == movie.getYear() &&
+                    currentMovie.getDirector().equalsIgnoreCase(movie.getDirector())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeMovie(String title, int year) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be null or empty");
+        }
+
+        if (year < 1930 || year > Year.now().getValue()) {
+            throw new IllegalArgumentException("Invalid year: " + year);
+        }
+
+        for (int i = 0; i < movies.size(); i++) {
+            Movie current = movies.get(i);
+            if (current.getTitle().equalsIgnoreCase(title.trim()) &&
+                    current.getYear() == year) {
+                movies.remove(i);
+                System.out.println("Movie '" + title + "' (" + year + ") successfully removed");
+                return true;
+            }
+        }
+
+        System.out.println("Movie '" + title + "' (" + year + ") not found");
+        return false;
+    }
+
+    public List<Movie> searchMoviesByDirector(String director) {
+
+        if(director == null){
+            throw new IllegalArgumentException("director cannot be null");
+        }
+        String searchDirector = director.trim();
+        if(searchDirector.isEmpty()){
+            throw new IllegalArgumentException("director cannot be empty");
+        }
+
+        List<Movie> searchedMovies = new ArrayList<>();
+        String searchDirectorLower = searchDirector.toLowerCase();
+        for (Movie movie : movies) {
+            if(movie.getTitle().toLowerCase().contains(searchDirectorLower)){
+                searchedMovies.add(movie);
+            }
+        }
+
+        printSearchReuslt(director,searchedMovies.size());
+        return searchedMovies;
+
+    }
+    private void printSearchReuslt(String director,int count){
+        System.out.println("Find film by'" + director + "': "+ count);
+    }
+
 }
