@@ -1,5 +1,6 @@
 package com._3JLOYBOJLK;
 
+import java.time.Year;
 import java.util.Scanner;
 
 public class Application {
@@ -48,8 +49,93 @@ public class Application {
     }
 
     private void addMovie() {
+        System.out.println("=== ADD NEW MOVIE ===");
+        try {
+            String title = checkerString("Enter title: ", sc);
+            int year = checkerYear("Enter year: ", sc);
+            String director = checkerString("Enter director: ", sc);
+            String genre = checkerString("Enter genre: ", sc);
+            double rating = checkerRating("Enter rating: ", sc);
 
+            Movie newMovie = new Movie(title, year, director,
+                    "Unknown".equals(genre) ? null : genre,
+                    rating);
+
+            if (collection.addMovie(newMovie)) {
+                System.out.println("✅ Movie added successfully!");
+            }
+        } catch (Exception e) {
+            System.out.println("✗ Failed to add movie: " + e.getMessage());
+        }
     }
+
+    //Add digits checker
+    private String checkerString(String prompt, Scanner scanner) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            String result = Validators.validateTitle(input);
+
+            if (!"Unknown".equals(result)) {
+                return result;
+            }
+            System.out.println("❌ Title cannot be empty! Please try again.");
+        }
+    }
+
+    private int checkerYear(String prompt, Scanner scanner) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("❌ Year cannot be empty!");
+                continue;
+            }
+
+            try {
+                int value = Integer.parseInt(input);
+                int validatedYear = Validators.validateYear(value);
+
+                if (validatedYear != 1930) {
+                    return validatedYear;
+                }
+
+                System.out.println("❌ Year must be between 1930 and " + Year.now().getValue());
+
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Please enter a valid number!");
+            }
+        }
+    }
+
+    private double checkerRating(String prompt, Scanner scanner) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("❌ Rating cannot be empty!");
+                continue;
+            }
+
+            try {
+                double value = Double.parseDouble(input);
+                double validatedRating = Validators.validateRating(value);
+
+                if (validatedRating != 0.0) {
+                    return validatedRating;
+                }
+
+                System.out.println("❌ Rating must be between 0.0 and 10.0");
+
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Please enter a valid number!");
+            }
+        }
+    }
+
 
     private void removeMovie() {
 
