@@ -8,11 +8,10 @@ public class CSVManager {
 
     public static List<Movie> loadMoviesFromCSV(String fileName) {
         List<Movie> movies = new ArrayList<>();
-        String filePath = "\\Filmoteka\\src\\main\\resources";
-        File file = new File(filePath + fileName);
+        File file = new File(fileName);
 
         if (!file.exists()) {
-            System.err.println("❌Error: File not found: " + file.getAbsolutePath());
+            System.err.println("❌Error: File not found: " + file.getAbsoluteFile());
             return movies;
         }
 

@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Validators {
 
-    //add validate symbols(have 1 func)
+    //add validate symbols and length(have 1 func)
     public static String validateTitle(String title) {
         return (title != null && !title.trim().isEmpty()) ? title.trim() : "Unknown";
     }
@@ -16,11 +16,11 @@ public class Validators {
         int currentYear = Year.now().getValue();
         return (year >= 1930 && year <= currentYear) ? year : 1930;
     }
-
+    //add validate symbols and length(have 1 func)
     public static String validateDirector(String director) {
         return (director != null && !director.trim().isEmpty()) ? director.trim() : "Unknown";
     }
-
+    //add validate symbols and length(have 1 func)
     public static String validateGenre(String genre) {
         return (genre != null && !genre.trim().isEmpty()) ? genre.trim() : "Unknown";
     }
@@ -29,7 +29,6 @@ public class Validators {
         return (rating >= 0.0 && rating <= 10.0) ? rating : 0.0;
     }
 
-    //Change: Файл не найден: filePath
     public static String validateFile(Scanner sc) {
         System.out.println("Enter name of CSV File");
         while (true) {

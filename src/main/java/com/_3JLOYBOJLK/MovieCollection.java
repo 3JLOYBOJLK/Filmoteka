@@ -21,7 +21,7 @@ public class MovieCollection {
         this.movies = csvManager.loadMoviesFromCSV(filename);
     }
 
-    //✅ Movies successfully saved to dasdad.csv=== FILMOTEKA ===, but not create and saving to file
+    //✅ Movies successfully saved to filename=== FILMOTEKA ===, but not create and saving to file
     public boolean saveToFile(String filename) {
         if(csvManager.saveMoviesToCSV(movies, filename)){
             return true;
@@ -100,7 +100,7 @@ public class MovieCollection {
         return searchedMovies;
 
     }
-    public void printSearchResult(List<Movie> movies,int count){
+    public static void printSearchResult(List<Movie> movies,int count){
         System.out.println("Find film by '" + movies.get(0).getDirector()+ "' : "+ count);
 
         if(count!=0) {

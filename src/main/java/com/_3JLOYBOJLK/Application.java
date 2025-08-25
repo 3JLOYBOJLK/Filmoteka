@@ -91,8 +91,9 @@ public class Application {
             else System.out.println("❌Error: Movie not found");
 
         }
-
     }
+
+    //check this
     private void searchByDirector(){
        List<Movie> searchedMovie = new ArrayList<>();
         if(collection.getMovies().isEmpty()){
@@ -100,9 +101,10 @@ public class Application {
         }
         else{
             System.out.println("=== SEARCH BY DIRECTOR ===");
+            MovieCollection.printSearchResult(searchedMovie,searchedMovie.size());
             String director = checkerString("Enter director: ", sc);
             searchedMovie = collection.searchByDirector(director);
-            if(searchedMovie!=null){
+            if(!searchedMovie.isEmpty()){
                 for(Movie movie: searchedMovie){
                     System.out.println(movie);
                 }
@@ -112,20 +114,20 @@ public class Application {
             }
 
         }
-
     }
+
     private void loadFromCSVFile() {
         String fileName = Validators.validateFile(sc);
         List<Movie> currentCollectionCopy = collection.getMovies();
-        collection.loadFromFile(fileName);
+        collection.loadFromFile("\\Filmoteka\\src\\main\\resources\\"+fileName);
         if((!collection.getMovies().isEmpty()) && !(collection.getMovies().equals(currentCollectionCopy))) System.out.printf("✅ Movies successfully loaded from %s",fileName);
         else System.out.printf("❌Error: movies can't loaded from %s", fileName);
-
-
     }
+
+    //not create newFiles and adding in this
     private void saveToCSVFile() {
         String fileName = Validators.validateFile(sc);
-        if(collection.saveToFile(fileName)) System.out.printf("✅ Movies successfully saved to %s",fileName);
+        if(collection.saveToFile(fileName)) System.out.printf("✅ Movies successfully saved to %s\n",fileName);
         else System.out.printf("❌Error: movies can't saved to %s", fileName);
     }
 
