@@ -33,13 +33,13 @@ public class Application {
             case 5 -> loadFromCSVFile();
             case 6 -> saveToCSVFile();
             case 7 -> { return false; }
-            default -> System.out.println("Invalid choice");
+            default -> System.out.println("❌Error: Invalid choice");
         }
         return true;
     }
     private void showAllMovies() {
         if (collection.getMovies().isEmpty()){
-            System.out.println("There are no movies in the collection");
+            System.out.println("❌Error: There are no movies in the collection");
         }
         else{
             for (Movie movie : collection.getMovies()) {
@@ -65,16 +65,52 @@ public class Application {
                 System.out.println("✅ Movie added successfully!");
             }
         } catch (Exception e) {
-            System.out.println("✗ Failed to add movie: " + e.getMessage());
+            System.out.println("❌Error: Failed to add movie: " + e.getMessage());
         }
     }
 
-    //Add digits checker
+
+
+
+    private void removeMovie() {
+        if(collection.getMovies().isEmpty()){
+            System.out.println("❌Error: There are no movies in the collection for remove");
+        }
+        else{
+            String title;
+            int year;
+            while(true) {
+                System.out.println("=== REMOVE MOVIE ===");
+                title = checkerString("Enter title: ", sc);
+                year = checkerYear("Enter year: ", sc);
+                break;
+            }
+            if (collection.removeMovie(title, year))  System.out.println("✅ Movie remove successfully!");
+            else System.out.println("❌Error: Movie not found");
+
+        }
+
+    }
+    private void searchByDirector(){
+
+    }
+    private void loadFromCSVFile() {
+
+    }
+    private void saveToCSVFile() {
+
+    }
+
+
     private String checkerString(String prompt, Scanner scanner) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
 
+            if(hasDigit(input)){
+                System.out.println("❌ Title cannot has digit ! Please try again.");
+                continue;
+            }
             String result = Validators.validateTitle(input);
 
             if (!"Unknown".equals(result)) {
@@ -82,6 +118,15 @@ public class Application {
             }
             System.out.println("❌ Title cannot be empty! Please try again.");
         }
+    }
+
+    private boolean hasDigit(String input) {
+        for(char c: input.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private int checkerYear(String prompt, Scanner scanner) {
@@ -134,19 +179,5 @@ public class Application {
                 System.out.println("❌ Please enter a valid number!");
             }
         }
-    }
-
-
-    private void removeMovie() {
-
-    }
-    private void searchByDirector(){
-
-    }
-    private void loadFromCSVFile() {
-
-    }
-    private void saveToCSVFile() {
-
     }
 }

@@ -33,12 +33,12 @@ public class Validators {
             String input = sc.nextLine().trim();
 
             if (input.isEmpty()) {
-                System.out.println("Filename cannot be empty. Try again.");
+                System.out.println("❌Error: Filename cannot be empty. Try again.");
                 continue;
             }
 
             if(containtsInvalidSymbols(input)){
-                System.out.println("Filename contains invalid symbols. Try again:");
+                System.out.println("❌Error: Filename contains invalid symbols. Try again:");
                 continue;
             }
 
@@ -46,7 +46,7 @@ public class Validators {
             File file = new File(formatingName);
 
             if (file.exists()) {
-                System.out.println("File already exists. He will be overwritten.");
+                System.out.println("❌Error: File already exists. He will be overwritten.");
             }
             return formatingName;
         }

@@ -30,7 +30,7 @@ public class MovieCollection {
         }
 
         if (isMovieExists(newMovie)) {
-            System.out.println("Movie '" + newMovie.getTitle() +
+            System.out.println("❌Error: Movie '" + newMovie.getTitle() +
                     "' (" + newMovie.getYear() + ") already exists in collection");
             return false;
         }
@@ -54,11 +54,11 @@ public class MovieCollection {
 
     public boolean removeMovie(String title, int year) {
         if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Title cannot be null or empty");
+            throw new IllegalArgumentException("❌Error: Title cannot be null or empty");
         }
 
         if (year < 1930 || year > Year.now().getValue()) {
-            throw new IllegalArgumentException("Invalid year: " + year);
+            throw new IllegalArgumentException("❌Error: Invalid year: " + year);
         }
 
         for (int i = 0; i < movies.size(); i++) {
@@ -71,18 +71,18 @@ public class MovieCollection {
             }
         }
 
-        System.out.println("Movie '" + title + "' (" + year + ") not found");
+        System.out.println("❌Error: Movie '" + title + "' (" + year + ") not found");
         return false;
     }
 
     public List<Movie> searchMoviesByDirector(String director) {
 
         if(director == null){
-            throw new IllegalArgumentException("director cannot be null");
+            throw new IllegalArgumentException("❌Error: director cannot be null");
         }
         String searchDirector = director.trim();
         if(searchDirector.isEmpty()){
-            throw new IllegalArgumentException("director cannot be empty");
+            throw new IllegalArgumentException("❌Error: director cannot be empty");
         }
 
         List<Movie> searchedMovies = new ArrayList<>();

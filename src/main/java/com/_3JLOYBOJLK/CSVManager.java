@@ -34,7 +34,7 @@ public class CSVManager {
                 }
             }
         } catch (IOException | NumberFormatException e) {
-            throw new RuntimeException("Failed to load movies from " + fileName, e);
+            throw new RuntimeException("❌Error: Failed to load movies from " + fileName, e);
         }
         return movies;
     }
@@ -48,7 +48,7 @@ public class CSVManager {
             }
         } catch (IOException e) {
             new File(fileName).delete();
-            throw new RuntimeException("Failed to save movies to " + fileName, e);
+            throw new RuntimeException("❌Error: Failed to save movies to " + fileName, e);
         }
     }
 }
