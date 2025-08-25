@@ -1,6 +1,8 @@
 package com._3JLOYBOJLK;
 
 import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Application {
@@ -92,13 +94,39 @@ public class Application {
 
     }
     private void searchByDirector(){
+       List<Movie> searchedMovie = new ArrayList<>();
+        if(collection.getMovies().isEmpty()){
+            System.out.println("❌Error: There are no movies in the collection for remove");
+        }
+        else{
+            System.out.println("=== SEARCH BY DIRECTOR ===");
+            String director = checkerString("Enter director: ", sc);
+            searchedMovie = collection.searchByDirector(director);
+            if(searchedMovie!=null){
+                for(Movie movie: searchedMovie){
+                    System.out.println(movie);
+                }
+            }
+            else{
+                System.out.printf("❌ Not found movies by %s",director);
+            }
+
+        }
 
     }
     private void loadFromCSVFile() {
+        String fileName = Validators.validateFile(sc);
+        List<Movie> currentCollectionCopy = collection.getMovies();
+        collection.loadFromFile(fileName);
+        if((!collection.getMovies().isEmpty()) && !(collection.getMovies().equals(currentCollectionCopy))) System.out.printf("✅ Movies successfully loaded from %s",fileName);
+        else System.out.printf("❌Error: movies can't loaded from %s", fileName);
+
 
     }
     private void saveToCSVFile() {
-
+        String fileName = Validators.validateFile(sc);
+        if(collection.saveToFile(fileName)) System.out.printf("✅ Movies successfully saved to %s",fileName);
+        else System.out.printf("❌Error: movies can't saved to %s", fileName);
     }
 
 

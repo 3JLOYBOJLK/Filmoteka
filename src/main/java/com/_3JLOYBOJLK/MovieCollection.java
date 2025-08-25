@@ -21,8 +21,12 @@ public class MovieCollection {
         this.movies = csvManager.loadMoviesFromCSV(filename);
     }
 
-    public void saveToFile(String filename) {
-        csvManager.saveMoviesToCSV(movies, filename);
+    //✅ Movies successfully saved to dasdad.csv=== FILMOTEKA ===, but not create and saving to file
+    public boolean saveToFile(String filename) {
+        if(csvManager.saveMoviesToCSV(movies, filename)){
+            return true;
+        }
+        return false;
     }
     public boolean addMovie(Movie newMovie) {
         if (newMovie == null) {
@@ -75,7 +79,7 @@ public class MovieCollection {
         return false;
     }
 
-    public List<Movie> searchMoviesByDirector(String director) {
+    public List<Movie> searchByDirector(String director) {
 
         if(director == null){
             throw new IllegalArgumentException("❌Error: director cannot be null");
@@ -93,12 +97,17 @@ public class MovieCollection {
             }
         }
 
-        printSearchReuslt(director,searchedMovies.size());
         return searchedMovies;
 
     }
-    private void printSearchReuslt(String director,int count){
-        System.out.println("Find film by'" + director + "': "+ count);
-    }
+    public void printSearchResult(List<Movie> movies,int count){
+        System.out.println("Find film by '" + movies.get(0).getDirector()+ "' : "+ count);
 
+        if(count!=0) {
+            for (Movie movie : movies) {
+                System.out.println(movie);
+            }
+        }
+    }
 }
+

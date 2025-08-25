@@ -8,10 +8,11 @@ public class CSVManager {
 
     public static List<Movie> loadMoviesFromCSV(String fileName) {
         List<Movie> movies = new ArrayList<>();
-        File file = new File(fileName);
+        String filePath = "\\Filmoteka\\src\\main\\resources";
+        File file = new File(filePath + fileName);
 
         if (!file.exists()) {
-            System.err.println("Файл не найден: " + file.getAbsolutePath());
+            System.err.println("❌Error: File not found: " + file.getAbsolutePath());
             return movies;
         }
 
@@ -39,16 +40,25 @@ public class CSVManager {
         return movies;
     }
 
-    public static void saveMoviesToCSV(List<Movie> movies, String fileName) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
 
+    public static boolean saveMoviesToCSV(List<Movie> movies, String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            int count= 0;
             for (Movie movie : movies) {
                 writer.write(movie.toCSVString());
                 writer.newLine();
+                count++;
             }
-        } catch (IOException e) {
+            if(count==movies.size()){
+                return true;
+            }
+            return false;
+        }
+        catch (IOException e) {
             new File(fileName).delete();
             throw new RuntimeException("❌Error: Failed to save movies to " + fileName, e);
+
         }
+
     }
 }
