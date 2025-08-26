@@ -9,11 +9,13 @@ public class Application {
 
     private final Scanner sc;
     private final MovieCollection collection;
+    private final MovieCollection colectionFromFile;
     private final Menu menu;
 
     public Application() {
         this.sc = new Scanner(System.in);
         this.collection = new MovieCollection();
+        this.colectionFromFile = new MovieCollection();
         this.menu = new Menu();
     }
 
@@ -29,12 +31,14 @@ public class Application {
     private boolean processingChoice(int choice) {
         switch (choice) {
             case 1 -> showAllMovies();
-            case 2 -> addMovie();
-            case 3 -> removeMovie();
-            case 4 -> searchByDirector();
-            case 5 -> loadFromCSVFile();
-            case 6 -> saveToCSVFile();
-            case 7 -> { return false; }
+            case 2 -> showCollectionFromFile();
+            case 3 -> addMovie();
+            case 4 -> removeMovie();
+            case 5 -> searchByDirectorCurrentCollection();
+            case 6 -> searchByDirectorFromFile();
+            case 7 -> loadFromCSVFile();
+            case 8 -> saveToCSVFile();
+            case 9 -> { return false; }
             default -> System.out.println("❌Error: Invalid choice");
         }
         return true;
@@ -71,6 +75,10 @@ public class Application {
         }
     }
 
+    private void showCollectionFromFile(){
+        String fileForLoaded =  Validators.validateFile(sc);
+        colectionFromFile.loadFromFile("\\Filmoteka\\src\\main\\CreatablesFiles\\"+fileForLoaded);
+    }
 
 
 
@@ -94,23 +102,51 @@ public class Application {
     }
 
     //check this
-    private void searchByDirector(){
+    private void  searchByDirectorCurrentCollection(){
        List<Movie> searchedMovie = new ArrayList<>();
         if(collection.getMovies().isEmpty()){
             System.out.println("❌Error: There are no movies in the collection for remove");
         }
         else{
             System.out.println("=== SEARCH BY DIRECTOR ===");
-            MovieCollection.printSearchResult(searchedMovie,searchedMovie.size());
             String director = checkerString("Enter director: ", sc);
             searchedMovie = collection.searchByDirector(director);
+
             if(!searchedMovie.isEmpty()){
+                MovieCollection.printSearchResult(searchedMovie,searchedMovie.size());
                 for(Movie movie: searchedMovie){
                     System.out.println(movie);
                 }
             }
             else{
-                System.out.printf("❌ Not found movies by %s",director);
+                System.out.printf("❌ Not found movies by %s\n",director);
+            }
+
+        }
+    }
+
+    private void  searchByDirectorFromFile(){
+        List<Movie> searchedMovie = new ArrayList<>();
+        String fileForLoaded =  Validators.validateFile(sc);
+        colectionFromFile.loadFromFile("\\Filmoteka\\src\\main\\CreatablesFiles\\"+fileForLoaded);
+
+
+        if(colectionFromFile.getMovies().isEmpty()){
+            System.out.println("❌Error: There are no movies in the collection for remove");
+        }
+        else{
+            System.out.println("=== SEARCH BY DIRECTOR ===");
+            String director = checkerString("Enter director: ", sc);
+            searchedMovie = colectionFromFile.searchByDirector(director);
+
+            if(!searchedMovie.isEmpty()){
+                MovieCollection.printSearchResult(searchedMovie,searchedMovie.size());
+                for(Movie movie: searchedMovie){
+                    System.out.println(movie);
+                }
+            }
+            else{
+                System.out.printf("❌ Not found movies by %s\n",director);
             }
 
         }
@@ -120,7 +156,7 @@ public class Application {
         String fileName = Validators.validateFile(sc);
         List<Movie> currentCollectionCopy = collection.getMovies();
         collection.loadFromFile("\\Filmoteka\\src\\main\\resources\\"+fileName);
-        if((!collection.getMovies().isEmpty()) && !(collection.getMovies().equals(currentCollectionCopy))) System.out.printf("✅ Movies successfully loaded from %s",fileName);
+        if((!collection.getMovies().isEmpty()) && !(collection.getMovies().equals(currentCollectionCopy))) System.out.printf("✅ Movies successfully loaded from %s\n",fileName);
         else System.out.printf("❌Error: movies can't loaded from %s", fileName);
     }
 

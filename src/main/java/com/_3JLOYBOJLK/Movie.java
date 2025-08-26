@@ -67,7 +67,7 @@ public class Movie {
         this.rating = Validators.validateRating(rating);
     }
 
-
+    //do straight output
     public String toString() {
         return String.format(
                 "┌───────────────────────────────────┐\n" +
