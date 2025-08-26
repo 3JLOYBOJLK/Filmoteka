@@ -1,5 +1,7 @@
 package com._3JLOYBOJLK;
 
+import java.awt.desktop.ScreenSleepEvent;
+import java.sql.SQLOutput;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,20 +32,31 @@ public class Application {
 
     private boolean processingChoice(int choice) {
         switch (choice) {
-            case 1 -> showAllMovies();
-            case 2 -> showCollectionFromFile();
-            case 3 -> addMovie();
-            case 4 -> removeMovie();
-            case 5 -> searchByDirectorCurrentCollection();
-            case 6 -> searchByDirectorFromFile();
-            case 7 -> loadFromCSVFile();
-            case 8 -> saveToCSVFile();
-            case 9 -> { return false; }
+            case 1 -> showCollectionMovies();
+            case 2 -> addMovie();
+            case 3 -> removeMovie();
+            case 4 -> searchByDirectorCurrentCollection();
+            case 5 -> searchByDirectorFromFile();
+            case 6 -> loadFromCSVFile();
+            case 7 -> saveToCSVFile();
+            case 8 -> { return false; }
             default -> System.out.println("❌Error: Invalid choice");
         }
         return true;
     }
-    private void showAllMovies() {
+
+    private void showCollectionMovies() {
+        System.out.println("=== Choice Collection ===");
+        System.out.println("1. Current collection\n"+"2. Collection from file\n");
+        int choiceCollection = Integer.parseInt(sc.nextLine());
+        switch (choiceCollection){
+            case 1 -> showCurrentCollectionMovies();
+            case 2 ->showCollectionFromFile();
+            default -> System.out.printf("❌Error: Invalid Choice");
+        }
+    }
+
+    private void showCurrentCollectionMovies() {
         if (collection.getMovies().isEmpty()){
             System.out.println("❌Error: There are no movies in the collection");
         }
@@ -54,7 +67,29 @@ public class Application {
         }
     }
 
-    private void addMovie() {
+    private void showCollectionFromFile(){
+        String fileForLoaded =  Validators.validateFile(sc);
+        colectionFromFile.loadFromFile("\\Filmoteka\\src\\main\\CreatablesFiles\\"+fileForLoaded);
+        if(!colectionFromFile.getMovies().isEmpty()){
+            for(Movie movie : colectionFromFile.getMovies()){
+                System.out.println(movie);
+            }
+        }
+        else System.out.printf("❌Error: There are no movies in the %s\n",fileForLoaded);
+    }
+
+    private void addMovie(){
+        System.out.println("Choice collection");
+        System.out.println("1. Current collection\n"+"2.Collection from file\n");
+        int choiceCollection = Integer.parseInt(sc.nextLine());
+        switch (choiceCollection){
+            case 1 -> addMovieToCurrentCollection();
+            case 2 -> addMovieToCollectionFromFile();
+            default -> System.out.println("❌Error: Invalid Choice");
+        }
+    }
+
+    private void addMovieToCurrentCollection() {
         System.out.println("=== ADD NEW MOVIE ===");
         try {
             String title = checkerString("Enter title: ", sc);
@@ -74,10 +109,25 @@ public class Application {
             System.out.println("❌Error: Failed to add movie: " + e.getMessage());
         }
     }
+    private void addMovieToCollectionFromFile() {
+        System.out.println("=== ADD NEW MOVIE ===");
+        try {
+            String title = checkerString("Enter title: ", sc);
+            int year = checkerYear("Enter year: ", sc);
+            String director = checkerString("Enter director: ", sc);
+            String genre = checkerString("Enter genre: ", sc);
+            double rating = checkerRating("Enter rating: ", sc);
 
-    private void showCollectionFromFile(){
-        String fileForLoaded =  Validators.validateFile(sc);
-        colectionFromFile.loadFromFile("\\Filmoteka\\src\\main\\CreatablesFiles\\"+fileForLoaded);
+            Movie newMovie = new Movie(title, year, director,
+                    "Unknown".equals(genre) ? null : genre,
+                    rating);
+
+            if (collectionFromFile.addMovie(newMovie)) {
+                System.out.println("✅ Movie added successfully!");
+            }
+        } catch (Exception e) {
+            System.out.println("❌Error: Failed to add movie: " + e.getMessage());
+        }
     }
 
 
@@ -117,7 +167,7 @@ public class Application {
                 for(Movie movie: searchedMovie){
                     System.out.println(movie);
                 }
-            }
+                }
             else{
                 System.out.printf("❌ Not found movies by %s\n",director);
             }
@@ -162,8 +212,26 @@ public class Application {
 
     //not create newFiles and adding in this
     private void saveToCSVFile() {
+        System.out.println("Choice collection");
+        System.out.println("1. Current collection\n" + "2. Collection from File");
+        int choiceCollection = Integer.parseInt(sc.nextLine());
+        switch (choiceCollection){
+            case 1-> saveProgramCollection();
+            case 2-> saveCollectionFromFile();
+            default: System.out.printf("❌Error: Invalid choice);
+        }
+
+    }
+
+    private void saveProgramCollection(){
         String fileName = Validators.validateFile(sc);
-        if(collection.saveToFile(fileName)) System.out.printf("✅ Movies successfully saved to %s\n",fileName);
+        if(collection.saveToFile("\\Filmoteka\\src\\main\\resources\\"+fileName)) System.out.printf("✅ Movies successfully saved to %s\n",fileName);
+        else System.out.printf("❌Error: movies can't saved to %s", fileName);
+    }
+
+    private void saveCollectionFromFile(){
+        String fileName = Validators.validateFile(sc);
+        if(colectionFromFile.saveToFile("\\Filmoteka\\src\\main\\SavedFiles\\"+fileName)) System.out.printf("✅ Movies successfully saved to %s\n",fileName);
         else System.out.printf("❌Error: movies can't saved to %s", fileName);
     }
 

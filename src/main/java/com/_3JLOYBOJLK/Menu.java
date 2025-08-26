@@ -6,12 +6,12 @@ public class Menu {
 
     public void show() {
         System.out.println("=== FILMOTEKA ===\n" +
-                "1. \uD83D\uDCCB Show Current Collection\n" +
-                "2. \uD83D\uDCCB Show Collection From File\n" +
+                "1. \uD83D\uDCCB Show current collection movies\n" +
+                "2. \uD83D\uDCCB Show collection movies from File\n" +
                 "3. ➕ Add movie\n" +
                 "4. ❌ Delete movie\n" +
-                "5. \uD83D\uDD0D Search by director (Current collection)\n" +
-                "6. \uD83D\uDD0D Search by director (Collection from file)\n" +
+                "5. \uD83D\uDD0D Search by director (Current collection movies)\n" +
+                "6. \uD83D\uDD0D Search by director (Collection movies from file)\n" +
                 "7. \uD83D\uDCBE Load collection from file\n" +
                 "8. \uD83D\uDCC2 Save collection to file\n" +
                 "9. \uD83D\uDEAA Exit");
