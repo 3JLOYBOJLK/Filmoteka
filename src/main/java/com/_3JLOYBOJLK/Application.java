@@ -192,32 +192,33 @@ public class Application {
 
     private void  searchByDirectorCurrentCollection(){
        List<Movie> searchedMovie;
-        System.out.println("What Directory you want to search?");
-        System.out.println("1. CreatablesFiles\n"+"2. resources\n");
-        int choiceDirectory = Integer.parseInt(sc.nextLine());
-        switch (choiceDirectory){
-            case 1-> collection.loadFromFile("\\Filmoteka\\src\\main\\CreatablesFiles\\"+fileForLoaded);
-            case 2-> collectionFromFile.loadFromFile("\\Filmoteka\\src\\main\\resources\\"+fileForLoaded);
-        }
-        if(collection.getMovies().isEmpty()){
-            System.out.println("❌Error: There are no movies in the collection for remove");
-        }
-        else{
-            System.out.println("=== SEARCH BY DIRECTOR ===");
-            String director = checkerString("Enter director: ", sc);
-            searchedMovie = collection.searchByDirector(director);
+       String fileForLoaded =  Validators.validateFile(sc);
+       System.out.println("What Directory you want to search?");
+       System.out.println("1. CreatablesFiles\n"+"2. resources\n");
+       int choiceDirectory = Integer.parseInt(sc.nextLine());
+       switch (choiceDirectory){
+           case 1-> collection.loadFromFile("\\Filmoteka\\src\\main\\CreatablesFiles\\"+fileForLoaded);
+           case 2-> collectionFromFile.loadFromFile("\\Filmoteka\\src\\main\\resources\\"+fileForLoaded);
+       }
+       if(collection.getMovies().isEmpty()){
+           System.out.println("❌Error: There are no movies in the collection for remove");
+       }
+       else{
+           System.out.println("=== SEARCH BY DIRECTOR ===");
+           String director = checkerString("Enter director: ", sc);
+           searchedMovie = collection.searchByDirector(director);
 
-            if(!searchedMovie.isEmpty()){
-                MovieCollection.printSearchResult(searchedMovie,searchedMovie.size());
-                for(Movie movie: searchedMovie){
-                    System.out.println(movie);
-                }
-                }
-            else{
-                System.out.printf("❌ Not found movies by %s\n",director);
-            }
+           if(!searchedMovie.isEmpty()){
+               MovieCollection.printSearchResult(searchedMovie,searchedMovie.size());
+               for(Movie movie: searchedMovie){
+                   System.out.println(movie);
+               }
+           }
+           else{
+               System.out.printf("❌ Not found movies by %s\n",director);
+           }
 
-        }
+       }
     }
 
     private void  searchByDirectorFromFile(){
@@ -268,7 +269,7 @@ public class Application {
         switch (choiceCollection){
             case 1-> saveProgramCollection();
             case 2-> saveCollectionFromFile();
-            default: System.out.printf("❌Error: Invalid choice);
+            default-> System.out.println("❌Error: Invalid choice");
         }
 
     }
