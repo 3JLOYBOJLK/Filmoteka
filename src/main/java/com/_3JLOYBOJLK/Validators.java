@@ -75,4 +75,82 @@ public class Validators {
             return fileName + ".csv";
         }
     }
+    public static String checkerString(String prompt, Scanner scanner) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if(hasDigit(input)){
+                System.out.println("❌ Title cannot has digit ! Please try again.");
+                continue;
+            }
+            String result = Validators.validateTitle(input);
+
+            if (!"Unknown".equals(result)) {
+                return result;
+            }
+            System.out.println("❌ Title cannot be empty! Please try again.");
+        }
+    }
+
+    private static boolean hasDigit(String input) {
+        for(char c: input.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int checkerYear(String prompt, Scanner scanner) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("❌ Year cannot be empty!");
+                continue;
+            }
+
+            try {
+                int value = Integer.parseInt(input);
+                int validatedYear = Validators.validateYear(value);
+
+                if (validatedYear != 1930) {
+                    return validatedYear;
+                }
+
+                System.out.println("❌ Year must be between 1930 and " + Year.now().getValue());
+
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Please enter a valid number!");
+            }
+        }
+    }
+
+    public static double checkerRating(String prompt, Scanner scanner) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("❌ Rating cannot be empty!");
+                continue;
+            }
+
+            try {
+                double value = Double.parseDouble(input);
+                double validatedRating = Validators.validateRating(value);
+
+                if (validatedRating != 0.0) {
+                    return validatedRating;
+                }
+
+                System.out.println("❌ Rating must be between 0.0 and 10.0");
+
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Please enter a valid number!");
+            }
+        }
+    }
 }
