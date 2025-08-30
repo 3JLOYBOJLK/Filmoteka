@@ -81,7 +81,7 @@ public class Movie {
                 "🎬 " + Validators.validateTitle(title),
                 "📅 " + Validators.validateYear(year),
                 "🎥 " + Validators.validateDirector(director),
-                ":D " + Validators.validateGenre(genre),
+                "\uD83C\uDFF7\uFE0F " + Validators.validateGenre(genre),
                 "⭐ " + (Validators.validateRating(rating)> 0 ?
                         String.format("%.1f/10", Validators.validateRating(rating)) : "N/A")
         );

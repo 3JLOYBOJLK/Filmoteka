@@ -92,7 +92,7 @@ public class MovieCollection {
         List<Movie> searchedMovies = new ArrayList<>();
         String searchDirectorLower = searchDirector.toLowerCase();
         for (Movie movie : movies) {
-            if(movie.getTitle().toLowerCase().contains(searchDirectorLower)){
+            if(movie.getDirector().toLowerCase().equals(searchDirectorLower)){
                 searchedMovies.add(movie);
             }
         }

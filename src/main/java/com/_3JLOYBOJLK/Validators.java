@@ -1,7 +1,6 @@
 package com._3JLOYBOJLK;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Year;
 import java.util.Scanner;
 
@@ -75,31 +74,43 @@ public class Validators {
             return fileName + ".csv";
         }
     }
-    public static String checkerString(String prompt, Scanner scanner) {
+
+    public static String checkerString(String prompt, Scanner scanner,String field,Boolean digit) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
-
-            if(hasDigit(input)){
-                System.out.println("❌ Title cannot has digit ! Please try again.");
+            if(hasDigit(input)>0 && !digit)
+            {
+                System.out.printf("❌ %s cannot has digit(s) ! Please try again.\n",field);
                 continue;
             }
+            if(digit && hasDigit(input)>1){
+                System.out.printf("❌ %s cannot has more 2 digit ! Please try again.\n",field);
+                continue;
+            }
+
+
             String result = Validators.validateTitle(input);
 
             if (!"Unknown".equals(result)) {
                 return result;
             }
-            System.out.println("❌ Title cannot be empty! Please try again.");
+            System.out.printf("❌ %s cannot be empty! Please try again.\n",field);
         }
     }
+    public static String checkerString(String prompt, Scanner scanner, String field) {
+        return checkerString(prompt, scanner, field, false);
+    }
 
-    private static boolean hasDigit(String input) {
+
+    private static int hasDigit(String input) {
+        int count = 0;
         for(char c: input.toCharArray()) {
             if (Character.isDigit(c)) {
-                return true;
+                count++;
             }
         }
-        return false;
+        return count;
     }
 
     public static int checkerYear(String prompt, Scanner scanner) {

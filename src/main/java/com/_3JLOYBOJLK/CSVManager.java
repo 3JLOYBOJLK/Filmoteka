@@ -48,9 +48,8 @@ public class CSVManager {
                 writer.newLine();
                 count++;
             }
-            if(count==movies.size()){
-                return true;
-            }
+            writer.flush();
+            if(count>0) return true;
             return false;
         }
         catch (IOException e) {
