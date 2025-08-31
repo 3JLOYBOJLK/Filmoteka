@@ -8,7 +8,7 @@ public class Validators {
 
     //add validate symbols and length(have 1 func)
     public static String validateTitle(String title) {
-        return (title != null && !title.trim().isEmpty()) ? title.trim() : "Unknown";
+        return (title != null && !title.trim().isEmpty())? title.trim() : "Unknown";
     }
 
     public static int validateYear(int year) {
@@ -89,11 +89,13 @@ public class Validators {
                 continue;
             }
 
-
             String result = Validators.validateTitle(input);
 
             if (!"Unknown".equals(result)) {
                 return result;
+            }
+            else{
+                System.out.printf("❌ %s cannot be empty! Please try again.\n",field);
             }
             System.out.printf("❌ %s cannot be empty! Please try again.\n",field);
         }

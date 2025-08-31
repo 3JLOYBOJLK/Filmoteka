@@ -73,6 +73,7 @@ public class Application {
                 }
                 case 2 -> {
                     String fileName = Validators.validateFile(sc);
+                    collectionFromFile.loadFromFile(AppConfiguration.FILE_COLLECTION_DIR+fileName);
                     function2.accept(collectionFromFile, fileName);
                 }
                 default -> System.out.println("❌Error: Invalid Choice");
