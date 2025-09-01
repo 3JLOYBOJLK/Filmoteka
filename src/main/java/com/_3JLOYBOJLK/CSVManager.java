@@ -42,7 +42,10 @@ public class CSVManager {
 
     public static boolean saveMoviesToCSV(List<Movie> movies, String fileName) {
         File file = new File(fileName);
-
+        if(!file.exists()) {
+            System.out.println("❌Error:File can't created, failed to save movies.");
+            return false;
+        }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             int count= 0;
             for (Movie movie : movies) {

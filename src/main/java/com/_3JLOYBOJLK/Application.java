@@ -10,7 +10,7 @@ public class Application {
 
     private final Scanner sc;
     private final MovieCollection collection;
-    private final MovieCollection collectionFromFile;
+    private MovieCollection collectionFromFile;
     private final Menu menu;
 
 
@@ -78,10 +78,16 @@ public class Application {
                     function1.accept(collection,"movies.csv");
                 }
                 case 2 -> {
-                    String fileName = Validators.validateFile(sc);
+                    String fileName = Validators.validateFile(sc,AppConfiguration.CREATE_FILE_MODE);
+                    if(fileName==null){
+                        System.out.printf("❌Can't work with file %s\n",AppConfiguration.FILE_COLLECTION_DIR+fileName);
+                    }
+                    else{
+                        System.out.println(AppConfiguration.FILE_COLLECTION_DIR+fileName);
+                        collectionFromFile.loadFromFile(AppConfiguration.FILE_COLLECTION_DIR,fileName);
+                        function2.accept(collectionFromFile,fileName);
+                    }
 
-                    collectionFromFile.loadFromFile(AppConfiguration.FILE_COLLECTION_DIR,fileName);
-                    function2.accept(collectionFromFile,fileName);
 
 
 
@@ -115,7 +121,13 @@ public class Application {
             int choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1 -> function1.accept(collection);
-                case 2 -> function2.accept(collectionFromFile, AppConfiguration.FILE_COLLECTION_DIR);
+                case 2 -> {
+                    if(collectionFromFile.getMovies().isEmpty()) function2.accept(collectionFromFile, AppConfiguration.FILE_COLLECTION_DIR);
+                    else{
+                        showMoviesCurrentCollection(collectionFromFile.getMovies());
+                    }
+                }
+
                 default -> System.out.println("❌Error: Invalid Choice");
             }
         } catch (NumberFormatException e) {
@@ -133,13 +145,20 @@ public class Application {
         } else {
             showMoviesCurrentCollection(collection.getMovies());
         }
+        waitEnter(sc);
     }
 
     private void showCollectionMoviesFromFile(MovieCollection collection, String directoryName) {
-        String fileForLoaded = Validators.validateFile(sc);
-
-        collection.loadFromFile(directoryName,fileForLoaded);
-        showCollectionMovies(collection);
+        String fileForLoaded = Validators.validateFile(sc,AppConfiguration.NOT_CREATE_FILE_MODE);
+        if(fileForLoaded==null){
+            return;
+        }
+        else{
+            collection.loadFromFile(directoryName,fileForLoaded);
+            showCollectionMovies(collection);
+        }
+        collectionFromFile=new MovieCollection();
+        waitEnter(sc);
 
     }
 
@@ -183,6 +202,7 @@ public class Application {
         } catch (Exception e) {
             System.out.println("❌Error: Failed to add movie: " + e.getMessage());
         }
+        waitEnter(sc);
     }
 
 
@@ -199,15 +219,16 @@ public class Application {
         } else {
             showMoviesCurrentCollection(collection.getMovies());
             System.out.println("=== REMOVE MOVIE ===");
-            String title = Validators.checkerString("Enter title: ", sc,"Title",true);
-            int year = Validators.checkerYear("Enter year: ", sc);
+            String title = Validators.checkerString("Enter title: ", sc,"Title",AppConfiguration.ALLOW_DIGIT);
 
-            if (collection.removeMovie(title, year)) {
+            if (collection.removeMovie(title)) {
+                collection.saveToFile(AppConfiguration.FILE_COLLECTION_DIR+fileName);
                 System.out.println("✅ Movie remove successfully!");
             } else {
                 System.out.println("❌Error: Movie not found");
             }
         }
+        waitEnter(sc);
     }
 
     private void searchByDirectorMenu() {
@@ -231,6 +252,7 @@ public class Application {
             switch (answer) {
                 case "Y":showMoviesCurrentCollection(searchedMovie);
                 case "N":{
+                    waitEnter(sc);
                     return;
                 }
                 default:
@@ -241,6 +263,7 @@ public class Application {
         } else {
             System.out.printf("❌ Not found movies by director %s\n", director);
         }
+        waitEnter(sc);
     }
 
     private static void showMoviesCurrentCollection(List<Movie> collection) {
@@ -250,11 +273,12 @@ public class Application {
     }
 
     private void loadFromCSVFileMenu() {
+
         choiceCollection(this::loadCollectionFromCSVFile);
     }
 
     private void loadCollectionFromCSVFile(MovieCollection collection, String directoryName) {
-        String fileName = Validators.validateFile(sc);
+        String fileName = Validators.validateFile(sc,AppConfiguration.NOT_CREATE_FILE_MODE);
 
         int previousSize = collection.getMovies().size();
         collection.loadFromFile(directoryName,fileName);
@@ -265,6 +289,7 @@ public class Application {
         } else {
             System.out.printf("❌Error: movies can't be loaded from %s or no new movies found\n", fileName);
         }
+        waitEnter(sc);
     }
 
     private void saveToCSVFileMenu() {
@@ -280,6 +305,12 @@ public class Application {
         } else {
             System.out.printf("❌Error: movies can't be saved to %s\n", fileName);
         }
+        collectionFromFile=new MovieCollection();
+        waitEnter(sc);
+    }
+    public void waitEnter(Scanner sc){
+        System.out.println("Press Enter to continue...");
+        String enter = sc.nextLine();
     }
 
 }

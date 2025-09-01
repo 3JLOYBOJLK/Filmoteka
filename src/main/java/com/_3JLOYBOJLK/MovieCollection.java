@@ -54,26 +54,22 @@ public class MovieCollection {
         return false;
     }
 
-    public boolean removeMovie(String title, int year) {
+    public boolean removeMovie(String title) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("❌Error: Title cannot be null or empty");
         }
 
-        if (year < 1930 || year > Year.now().getValue()) {
-            throw new IllegalArgumentException("❌Error: Invalid year: " + year);
-        }
 
         for (int i = 0; i < movies.size(); i++) {
             Movie current = movies.get(i);
-            if (current.getTitle().equalsIgnoreCase(title.trim()) &&
-                    current.getYear() == year) {
+            if (current.getTitle().equalsIgnoreCase(title.trim())) {
                 movies.remove(i);
-                System.out.println("Movie '" + title + "' (" + year + ") successfully removed");
+                System.out.println("Movie '" + title + "' successfully removed");
                 return true;
             }
         }
 
-        System.out.println("❌Error: Movie '" + title + "' (" + year + ") not found");
+        System.out.println("❌Error: Movie '" + title + "' not found");
         return false;
     }
 

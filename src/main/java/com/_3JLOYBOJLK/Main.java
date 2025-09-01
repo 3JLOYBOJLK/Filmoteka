@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 //TODO
+//file of Name not good register(always lower)
 //LoadDirector(Load only from concret file another director)
 //not working saveMovie
 //2)do add and saving file in CreatablesFiles,before we are input dates.

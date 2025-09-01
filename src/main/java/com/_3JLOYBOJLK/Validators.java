@@ -28,22 +28,24 @@ public class Validators {
         return (rating >= 0.0 && rating <= 10.0) ? rating : 0.0;
     }
 
-    public static String validateFile(Scanner sc) {
+    public static String validateFile(Scanner sc,boolean allowCreatedFile) {
         while (true) {
             System.out.println("Enter name of CSV File");
-            String input = sc.nextLine().trim();
+            String originalInput = sc.nextLine().trim();
+            String input = originalInput;
 
             if (input.isEmpty()) {
                 System.out.println("❌Error: Filename cannot be empty. Try again.");
                 continue;
             }
 
-            if(containtsInvalidSymbols(input)){
+            if (containtsInvalidSymbols(input)) {
                 System.out.println("❌Error: Filename contains invalid symbols. Try again:");
                 continue;
             }
 
             String formatingName = formatFileName(input);
+
             File dir = new File(AppConfiguration.FILE_COLLECTION_DIR);
 
             boolean fileExists = false;
@@ -61,68 +63,39 @@ public class Validators {
                     }
                 }
             }
-
             if (fileExists) {
                 return existingFileName;
-                /*
-                System.out.println("""
-                        File already exists. Continue work with file?
-
-                        ✅YES
-                        ❌NO""");
-
-                String choice = sc.nextLine().trim().toLowerCase();
-                switch (choice) {
-                    case "yes": {
-                        System.out.println("Ok, continue work!");
-                        return existingFileName;
-                    }
-                    case "no": {
-                        System.out.println("""
-                                Ok, not continue work!\s
-                                Try input again!
-                                """);
-                        break;
-                    }
-                    default: {
-                        System.out.println("Invalid choice,Try again.");
-                        break;
-                    }
-                }
-            }*/
             }
-            return formatingName;
-                /*
+            if (allowCreatedFile) {
                 System.out.println("""
-                        ❌Error: File not found!
-                        Do yo want to create new File?
-                        
-                        ✅YES
-                        ❌NO
-                        """);
+                    ❌Error: File not found!
+                     Do yo want to create new File?
+                                                    
+                     ✅YES
+                     ❌NO
+                    """);
                 String choice = sc.nextLine().trim().toLowerCase();
                 switch (choice) {
                     case "yes": {
                         System.out.println("Ok, created new file!");
-                        return formatingName;
+                        return originalInput + ".csv";
                     }
                     case "no": {
-                        System.out.println("""
-                                Ok, not create a new File!\s
-                                """);
                         return null;
-
                     }
                     default: {
                         System.out.println("Invalid choice,Try again.");
                         break;
                     }
-
                 }
-            }*/
-
-        }
+            }
+                else{
+                    System.err.printf("❌Error: can't show collection, file %s not found.\n",AppConfiguration.FILE_COLLECTION_DIR+originalInput+".csv");
+                    return null;
+                }
+            }
     }
+
 
     private static boolean containtsInvalidSymbols(String filename){
         char[] invalidSymbols ={'<', '>', ':', '"', '/', '\\', '|', '?', '*'};
