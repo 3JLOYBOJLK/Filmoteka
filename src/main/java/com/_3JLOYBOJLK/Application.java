@@ -1,6 +1,5 @@
 package com._3JLOYBOJLK;
 
-import java.awt.desktop.ScreenSleepEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Scanner;
@@ -18,12 +17,20 @@ public class Application {
     public Application() {
         this.sc = new Scanner(System.in);
         this.collection = new MovieCollection();
-        this.collection.loadFromFile(AppConfiguration.defaultPath);
+        this.collection.loadFromFile(AppConfiguration.CURRENT_COLLECTION_DIR,"movies.csv");
         this.collectionFromFile = new MovieCollection();
         this.menu = new Menu();
     }
 
     public void run() {
+        boolean running = true;
+        while (running) {
+            menu.show();
+            int getChoice = menu.getChoice(sc);
+            running = processingChoice(getChoice);
+        }
+    }
+    public void reset(){
         boolean running = true;
         while (running) {
             menu.show();
@@ -60,7 +67,7 @@ public class Application {
             System.out.println("❌Error: Please enter a valid number");
         }
     }
-    private void choiceCollection(BiConsumer<MovieCollection, String> function1, BiConsumer<MovieCollection, String> function2) {
+    private void choicecollection(BiConsumer<MovieCollection,String > function1, BiConsumer<MovieCollection, String> function2) {
         System.out.println("=== Choice Collection ===");
         System.out.println("1. Default collection (resources/movies.csv)\n" + "2. Collection from file (CreatablesFiles/)\n");
 
@@ -68,13 +75,16 @@ public class Application {
             int choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1 -> {
-                    String fileName = Validators.validateFile(sc);
-                    function1.accept(collection, fileName);
+                    function1.accept(collection,"movies.csv");
                 }
                 case 2 -> {
                     String fileName = Validators.validateFile(sc);
-                    collectionFromFile.loadFromFile(AppConfiguration.FILE_COLLECTION_DIR+fileName);
-                    function2.accept(collectionFromFile, fileName);
+
+                    collectionFromFile.loadFromFile(AppConfiguration.FILE_COLLECTION_DIR,fileName);
+                    function2.accept(collectionFromFile,fileName);
+
+
+
                 }
                 default -> System.out.println("❌Error: Invalid Choice");
             }
@@ -114,10 +124,10 @@ public class Application {
     }
 
     private void showCollectionMoviesMenu() {
-        choiceCollection(this::showDefaultCollectionMovies, this::showCollectionMoviesFromFile);
+        choiceCollection(this::showCollectionMovies, this::showCollectionMoviesFromFile);
     }
 
-    private void showDefaultCollectionMovies(MovieCollection collection) {
+    private void showCollectionMovies(MovieCollection collection) {
         if (collection.getMovies().isEmpty()) {
             System.out.println("❌Error: There are no movies in the collection");
         } else {
@@ -127,20 +137,16 @@ public class Application {
 
     private void showCollectionMoviesFromFile(MovieCollection collection, String directoryName) {
         String fileForLoaded = Validators.validateFile(sc);
-        String filePath = buildFilePath(directoryName, fileForLoaded);
 
-        collection.loadFromFile(filePath);
-        if (collection.getMovies().isEmpty()) {
-            System.out.println("❌Error: There are no movies in the collection");
-        } else {
-            showMoviesCurrentCollection(collection.getMovies());
-        }
+        collection.loadFromFile(directoryName,fileForLoaded);
+        showCollectionMovies(collection);
+
     }
 
 
 
     private void addMovieMenu() {
-        choiceCollection(this::addMoviesToCollection, this::addMoviesToCollection);
+        choicecollection(this::addMoviesToCollection, this::addMoviesToCollection);
     }
 
     private void addMoviesToCollection(MovieCollection collection, String fileName) {
@@ -181,13 +187,12 @@ public class Application {
 
 
     private void removeMovieMenu() {
-        choiceCollection(this::removeMovieFromCollection, this::removeMovieFromCollection);
+        choicecollection(this::removeMovieFromCollection, this::removeMovieFromCollection);
     }
 
     private void removeMovieFromCollection(MovieCollection collection,String fileName) {
         if (collection == collectionFromFile) {
-            String filePath = buildFilePath(AppConfiguration.FILE_COLLECTION_DIR, fileName);
-            collectionFromFile.loadFromFile(filePath);
+            collectionFromFile.loadFromFile(AppConfiguration.FILE_COLLECTION_DIR,fileName);
         }
         if (collection.getMovies().isEmpty()) {
             System.out.println("❌Error: There are no movies in the collection for remove");
@@ -206,13 +211,12 @@ public class Application {
     }
 
     private void searchByDirectorMenu() {
-        choiceCollection(this::searchByDirector, this::searchByDirector);
+        choicecollection(this::searchByDirector, this::searchByDirector);
     }
 
     private void searchByDirector(MovieCollection collection,String fileName) {
         if(collection==collectionFromFile){
-            String filePath = buildFilePath(AppConfiguration.FILE_COLLECTION_DIR, fileName);
-            collectionFromFile.loadFromFile(filePath);
+            collectionFromFile.loadFromFile(AppConfiguration.FILE_COLLECTION_DIR,fileName);
         }
         showMoviesCurrentCollection(collection.getMovies());
         System.out.println("=== SEARCH BY DIRECTOR ===");
@@ -251,10 +255,9 @@ public class Application {
 
     private void loadCollectionFromCSVFile(MovieCollection collection, String directoryName) {
         String fileName = Validators.validateFile(sc);
-        String filePath = buildFilePath(directoryName, fileName);
 
         int previousSize = collection.getMovies().size();
-        collection.loadFromFile(filePath);
+        collection.loadFromFile(directoryName,fileName);
         int newSize = collection.getMovies().size();
 
         if (newSize > previousSize) {
@@ -265,12 +268,12 @@ public class Application {
     }
 
     private void saveToCSVFileMenu() {
-        choiceCollection(this::saveProgramCollection,this::saveProgramCollection);
+        choicecollection(this::saveProgramCollection,this::saveProgramCollection);
     }
 
     private void saveProgramCollection(MovieCollection collection, String fileName) {
 
-        String filePath = buildFilePath(AppConfiguration.FILE_COLLECTION_DIR, fileName);
+        String filePath = (AppConfiguration.FILE_COLLECTION_DIR+fileName);
 
         if (collection.saveToFile(filePath)) {
             System.out.printf("✅ Movies successfully saved to %s\n", fileName);
@@ -279,7 +282,4 @@ public class Application {
         }
     }
 
-    private String buildFilePath(String directoryName, String fileName) {
-        return directoryName + "/" + fileName;
-    }
 }

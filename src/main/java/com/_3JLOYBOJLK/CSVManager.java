@@ -6,9 +6,9 @@ import java.util.List;
 
 public class CSVManager {
 
-    public static List<Movie> loadMoviesFromCSV(String fileName) {
+    public static List<Movie> loadMoviesFromCSV(String directoryName, String fileName) {
         List<Movie> movies = new ArrayList<>();
-        File file = new File(fileName);
+        File file = new File(directoryName+fileName);
 
         if (!file.exists()) {
             System.err.println("❌Error: File not found: " + file.getAbsoluteFile());
@@ -41,6 +41,8 @@ public class CSVManager {
 
 
     public static boolean saveMoviesToCSV(List<Movie> movies, String fileName) {
+        File file = new File(fileName);
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             int count= 0;
             for (Movie movie : movies) {
@@ -55,8 +57,8 @@ public class CSVManager {
         catch (IOException e) {
             new File(fileName).delete();
             throw new RuntimeException("❌Error: Failed to save movies to " + fileName, e);
-
         }
 
     }
+
 }

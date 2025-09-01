@@ -29,8 +29,8 @@ public class Validators {
     }
 
     public static String validateFile(Scanner sc) {
-        System.out.println("Enter name of CSV File");
         while (true) {
+            System.out.println("Enter name of CSV File");
             String input = sc.nextLine().trim();
 
             if (input.isEmpty()) {
@@ -44,12 +44,83 @@ public class Validators {
             }
 
             String formatingName = formatFileName(input);
-            File file = new File(formatingName);
+            File dir = new File(AppConfiguration.FILE_COLLECTION_DIR);
 
-            if (file.exists()) {
-                System.out.println("❌Error: File already exists. He will be overwritten.");
+            boolean fileExists = false;
+            String existingFileName = null;
+
+            if (dir.exists() && dir.isDirectory()) {
+                String[] files = dir.list();
+                if (files != null) {
+                    for (String file : files) {
+                        if (file.equals(formatingName)) {
+                            fileExists = true;
+                            existingFileName = file;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (fileExists) {
+                return existingFileName;
+                /*
+                System.out.println("""
+                        File already exists. Continue work with file?
+
+                        ✅YES
+                        ❌NO""");
+
+                String choice = sc.nextLine().trim().toLowerCase();
+                switch (choice) {
+                    case "yes": {
+                        System.out.println("Ok, continue work!");
+                        return existingFileName;
+                    }
+                    case "no": {
+                        System.out.println("""
+                                Ok, not continue work!\s
+                                Try input again!
+                                """);
+                        break;
+                    }
+                    default: {
+                        System.out.println("Invalid choice,Try again.");
+                        break;
+                    }
+                }
+            }*/
             }
             return formatingName;
+                /*
+                System.out.println("""
+                        ❌Error: File not found!
+                        Do yo want to create new File?
+                        
+                        ✅YES
+                        ❌NO
+                        """);
+                String choice = sc.nextLine().trim().toLowerCase();
+                switch (choice) {
+                    case "yes": {
+                        System.out.println("Ok, created new file!");
+                        return formatingName;
+                    }
+                    case "no": {
+                        System.out.println("""
+                                Ok, not create a new File!\s
+                                """);
+                        return null;
+
+                    }
+                    default: {
+                        System.out.println("Invalid choice,Try again.");
+                        break;
+                    }
+
+                }
+            }*/
+
         }
     }
 
@@ -64,7 +135,7 @@ public class Validators {
     }
     private static String formatFileName(String fileName) {
 
-        if (fileName.toLowerCase().endsWith(".csv")) {
+        if (fileName.endsWith(".csv")||fileName.endsWith(".CSV")) {
             return fileName;
         } else if (fileName.endsWith(".")) {
             return fileName + "csv";

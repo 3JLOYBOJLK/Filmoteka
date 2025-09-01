@@ -17,13 +17,13 @@ public class MovieCollection {
         return Collections.unmodifiableList(new ArrayList<>(movies));
     }
 
-    public void loadFromFile(String filename) {
-        this.movies = csvManager.loadMoviesFromCSV(filename);
+    public void loadFromFile(String directoryName, String filename) {
+        this.movies = csvManager.loadMoviesFromCSV(directoryName,filename);
     }
 
     //✅ Movies successfully saved to filename=== FILMOTEKA ===, but not create and saving to file
     public boolean saveToFile(String filename) {
-        if(csvManager.saveMoviesToCSV(movies, filename)){
+        if(csvManager.saveMoviesToCSV(movies, filename) == true){
             return true;
         }
         return false;
@@ -35,7 +35,7 @@ public class MovieCollection {
 
         if (isMovieExists(newMovie)) {
             System.out.println("❌Error: Movie '" + newMovie.getTitle() +
-                    "' (" + newMovie.getYear() + ") already exists in collection");
+                    "' already exists in collection");
             return false;
         }
 
@@ -47,9 +47,7 @@ public class MovieCollection {
 
     private boolean isMovieExists(Movie movie) {
         for (Movie currentMovie : movies) {
-            if (currentMovie.getTitle().equalsIgnoreCase(movie.getTitle()) &&
-                    currentMovie.getYear() == movie.getYear() &&
-                    currentMovie.getDirector().equalsIgnoreCase(movie.getDirector())) {
+            if (currentMovie.getTitle().equalsIgnoreCase(movie.getTitle())) {
                 return true;
             }
         }

@@ -6,7 +6,6 @@ import java.util.Scanner;
 //TODO
 //LoadDirector(Load only from concret file another director)
 //not working saveMovie
-//1)add to check equals field of movie(Title),then we are adding movie in collection
 //2)do add and saving file in CreatablesFiles,before we are input dates.
 //3)!!! not create in a FILE_DIR/Filename
 //4)do momental saved in CreatablesFiles, because file was show, before cancel terminal.
