@@ -30,14 +30,6 @@ public class Application {
             running = processingChoice(getChoice);
         }
     }
-    public void reset(){
-        boolean running = true;
-        while (running) {
-            menu.show();
-            int getChoice = menu.getChoice(sc);
-            running = processingChoice(getChoice);
-        }
-    }
 
     private boolean processingChoice(int choice) {
         switch (choice) {
@@ -66,26 +58,19 @@ public class Application {
                 saveToCSVFileMenu();
                 waitEnter(sc);
             }
-            case 7 -> { return false; }
+            case 7->{
+                deleteFileCollectionMenu();
+                waitEnter(sc);
+            }
+            case 8 -> {
+                System.out.println("\uD83D\uDC4B Thanks for work with collections!\nGood bye!");
+                return false;
+            }
             default -> System.out.println("❌Error: Invalid choice");
         }
         return true;
     }
-    private void choiceCollection(Consumer<MovieCollection> function1,Consumer<MovieCollection> function2) {
-        System.out.println("=== Choice Collection ===");
-        System.out.println("1. Default collection\n" + "2. Collection from file\n");
 
-        try {
-            int choice = Integer.parseInt(sc.nextLine());
-            switch (choice) {
-                case 1 -> function1.accept(collection);
-                case 2 -> function2.accept(collectionFromFile);
-                default -> System.out.println("❌Error: Invalid Choice");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("❌Error: Please enter a valid number");
-        }
-    }
     private void choicecollectionForSave(BiConsumer<MovieCollection,String > function1, BiConsumer<MovieCollection, String> function2) {
         System.out.println("=== Choice Collection ===");
         System.out.println("1. Default collection (resources/movies.csv)\n" + "2. Collection from file (CreatablesFiles/)\n");
@@ -115,10 +100,6 @@ public class Application {
                         collectionFromFile.loadFromFile(fileName);
                         function2.accept(collectionFromFile,fileName);
                     }
-
-
-
-
                 }
                 default -> System.out.println("❌Error: Invalid Choice");
             }
@@ -134,6 +115,7 @@ public class Application {
             int choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1 -> {
+                        showCollectionMovies(collection);
                         function1.accept(collection,"movies.csv");
 
                 }
@@ -145,6 +127,7 @@ public class Application {
                     else{
                         System.out.println(fileName);
                         collectionFromFile.loadFromFile(fileName);
+                        showCollectionMovies(collectionFromFile);
                         function2.accept(collectionFromFile,fileName);
                     }
                 }
@@ -175,10 +158,6 @@ public class Application {
                         collectionFromFile.loadFromFile(fileName);
                         function2.accept(collectionFromFile,fileName);
                     }
-
-
-
-
                 }
                 default -> System.out.println("❌Error: Invalid Choice");
             }
@@ -209,6 +188,7 @@ public class Application {
             int choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1 -> {
+                    System.out.printf("=== %s ===\n",AppConfiguration.defaultName);
                     function1.accept(collection);
                 }
                 case 2 -> {
@@ -247,6 +227,7 @@ public class Application {
         }
         else{
             collection.loadFromFile(fileForLoaded);
+            System.out.printf("=== %s ===\n",fileForLoaded);
             showCollectionMovies(collection);
         }
         collectionFromFile=new MovieCollection();
@@ -260,6 +241,7 @@ public class Application {
     }
 
     private void addMoviesToCollection(MovieCollection collection, String fileName) {
+        System.out.printf( "===      %s       ===\n",fileName);
         System.out.println("=== ADD NEW MOVIE ===");
         try {
             String title = Validators.checkerString("Enter title: ", sc,"Title",true);
@@ -306,8 +288,10 @@ public class Application {
         }
         if (collection.getMovies().isEmpty()) {
             System.out.println("❌Error: There are no movies in the collection for remove");
-        } else {
+        }
+        else {
             showMoviesCurrentCollection(collection.getMovies());
+            System.out.printf(" ===     %s       ===\n",fileName);
             System.out.println("=== REMOVE MOVIE ===");
             String title = Validators.checkerString("Enter title: ", sc,"Title",AppConfiguration.ALLOW_DIGIT);
 
@@ -319,9 +303,8 @@ public class Application {
                     collection.saveToFile(AppConfiguration.FILE_COLLECTION_DIR+fileName);
                 }
                 System.out.println("✅ Movie remove successfully!");
-            } else {
-                System.out.println("❌Error: Movie not found");
             }
+            else System.out.println("❌Remove failed.");
         }
     }
 
@@ -334,6 +317,7 @@ public class Application {
             collectionFromFile.loadFromFile(fileName);
         }
         showMoviesCurrentCollection(collection.getMovies());
+        System.out.printf(" ===         %s         ===\n",fileName);
         System.out.println("=== SEARCH BY DIRECTOR ===");
         String director = Validators.checkerString("Enter director: ", sc,"Director");
 
@@ -380,8 +364,6 @@ public class Application {
 
         if (sizeCollection > 0) {
             System.out.printf("✅ Movies successfully loaded from %s. Loaded %d movies.\n", fileName, sizeCollection);
-        } else {
-            System.out.printf("❌Error: movies can't be loaded from %s or no new movies found\n", fileName);
         }
     }
 
@@ -412,7 +394,25 @@ public class Application {
         }
         collectionFromFile=new MovieCollection();
     }
-    public void waitEnter(Scanner sc){
+    private void deleteFileCollectionMenu(){
+        String fileName = Validators.validateFile(sc,AppConfiguration.NOT_CREATE_FILE_MODE);
+        if (fileName==null){
+            return;
+        }
+        deleteFileCollection(fileName);
+
+    }
+    private void deleteFileCollection(String fileName) {
+        File file = new File(AppConfiguration.FILE_COLLECTION_DIR+fileName);
+        if(file.delete()){
+            System.out.printf("✅File %s deleted successfully!\n", fileName);
+        }
+        else{
+            System.out.println("❌File could not be deleted!");
+        }
+    }
+
+    private void waitEnter(Scanner sc){
         System.out.println("Press Enter to continue...");
         String enter = sc.nextLine();
     }

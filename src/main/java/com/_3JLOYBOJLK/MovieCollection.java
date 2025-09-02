@@ -24,7 +24,6 @@ public class MovieCollection {
         this.movies = csvManager.loadMoviesFromCSV(AppConfiguration.FILE_COLLECTION_DIR,filename);
     }
 
-    //✅ Movies successfully saved to filename=== FILMOTEKA ===, but not create and saving to file
     public boolean saveToFile(String filePath) {
         if(csvManager.saveMoviesToCSV(movies, filePath) == true){
             return true;

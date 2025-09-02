@@ -8,7 +8,7 @@ public class Validators {
 
     //add validate symbols and length(have 1 func)
     public static String validateTitle(String title) {
-        return (title != null && !title.trim().isEmpty() && title.length()<=15 && title.length()>=3)? title.trim() : "Unknown";
+        return (title != null && !title.trim().isEmpty())? title.trim() : "Unknown";
     }
 
     public static int validateYear(int year) {
@@ -17,11 +17,11 @@ public class Validators {
     }
     //add validate symbols and length(have 1 func)
     public static String validateDirector(String director) {
-        return (director != null && !director.trim().isEmpty() && director.length()<=20 && director.length()>=3) ? director.trim() : "Unknown";
+        return (director != null && !director.trim().isEmpty()) ? director.trim() : "Unknown";
     }
     //add validate symbols and length(have 1 func)
     public static String validateGenre(String genre) {
-        return (genre != null && !genre.trim().isEmpty() && genre.length()<=20 && genre.length()>=3) ? genre.trim() : "Unknown";
+        return (genre != null && !genre.trim().isEmpty()) ? genre.trim() : "Unknown";
     }
 
     public static double validateRating(double rating) {
@@ -93,7 +93,7 @@ public class Validators {
                 }
             }
                 else{
-                    System.err.printf("❌Error: can't show collection, file %s not found.\n",AppConfiguration.FILE_COLLECTION_DIR+originalInput+".csv");
+                    System.err.printf("❌Error: can't work with collection, file %s not found.\n",AppConfiguration.FILE_COLLECTION_DIR+originalInput+".csv");
                     return null;
                 }
             }
@@ -126,6 +126,10 @@ public class Validators {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
+            if(input.isEmpty()){
+                System.out.printf("❌ %s cannot be empty! Please try again.\n",field);
+                continue;
+            }
             if(hasDigit(input)>0 && !digit)
             {
                 System.out.printf("❌ %s cannot has digit(s) ! Please try again.\n",field);
@@ -135,16 +139,15 @@ public class Validators {
                 System.out.printf("❌ %s cannot has more 2 digit ! Please try again.\n",field);
                 continue;
             }
-
+            if((input.length()>15 || input.length()<3)){
+                System.out.printf("❌ %s length must be between [3] and [15],Try again.\n",field);
+                continue;
+            }
             String result = Validators.validateTitle(input);
 
             if (!"Unknown".equals(result)) {
                 return result;
             }
-            else{
-                System.out.printf("❌ %s cannot be empty! Please try again.\n",field);
-            }
-            System.out.printf("❌ %s cannot be empty! Please try again.\n",field);
         }
     }
     public static String checkerString(String prompt, Scanner scanner, String field) {
