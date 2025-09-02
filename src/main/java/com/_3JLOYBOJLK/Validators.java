@@ -8,7 +8,7 @@ public class Validators {
 
     //add validate symbols and length(have 1 func)
     public static String validateTitle(String title) {
-        return (title != null && !title.trim().isEmpty())? title.trim() : "Unknown";
+        return (title != null && !title.trim().isEmpty() && title.length()<=15 && title.length()>=3)? title.trim() : "Unknown";
     }
 
     public static int validateYear(int year) {
@@ -17,11 +17,11 @@ public class Validators {
     }
     //add validate symbols and length(have 1 func)
     public static String validateDirector(String director) {
-        return (director != null && !director.trim().isEmpty()) ? director.trim() : "Unknown";
+        return (director != null && !director.trim().isEmpty() && director.length()<=20 && director.length()>=3) ? director.trim() : "Unknown";
     }
     //add validate symbols and length(have 1 func)
     public static String validateGenre(String genre) {
-        return (genre != null && !genre.trim().isEmpty()) ? genre.trim() : "Unknown";
+        return (genre != null && !genre.trim().isEmpty() && genre.length()<=20 && genre.length()>=3) ? genre.trim() : "Unknown";
     }
 
     public static double validateRating(double rating) {
@@ -38,7 +38,10 @@ public class Validators {
                 System.out.println("❌Error: Filename cannot be empty. Try again.");
                 continue;
             }
-
+            if(!(input.length()<=15 && input.length()>=3)){
+                System.out.println("❌Error: length of Filename must be between 3 and 15. Try again:");
+                continue;
+            }
             if (containtsInvalidSymbols(input)) {
                 System.out.println("❌Error: Filename contains invalid symbols. Try again:");
                 continue;
@@ -77,7 +80,7 @@ public class Validators {
                 String choice = sc.nextLine().trim().toLowerCase();
                 switch (choice) {
                     case "yes": {
-                        System.out.println("Ok, created new file!");
+                        System.out.printf("Ok, created new file ' %s '\n",originalInput+".csv");
                         return originalInput + ".csv";
                     }
                     case "no": {

@@ -17,13 +17,16 @@ public class MovieCollection {
         return Collections.unmodifiableList(new ArrayList<>(movies));
     }
 
-    public void loadFromFile(String directoryName, String filename) {
-        this.movies = csvManager.loadMoviesFromCSV(directoryName,filename);
+    public void loadFromDefaultFile(String filename) {
+        this.movies = csvManager.loadMoviesFromCSV(AppConfiguration.CURRENT_COLLECTION_DIR,filename);
+    }
+    public void loadFromFile(String filename) {
+        this.movies = csvManager.loadMoviesFromCSV(AppConfiguration.FILE_COLLECTION_DIR,filename);
     }
 
     //✅ Movies successfully saved to filename=== FILMOTEKA ===, but not create and saving to file
-    public boolean saveToFile(String filename) {
-        if(csvManager.saveMoviesToCSV(movies, filename) == true){
+    public boolean saveToFile(String filePath) {
+        if(csvManager.saveMoviesToCSV(movies, filePath) == true){
             return true;
         }
         return false;
