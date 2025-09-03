@@ -1,0 +1,12 @@
+com\filmoteka\ui\ConsoleColors.class
+com\filmoteka\service\ValidationService.class
+com\filmoteka\data\CsvDataManager.class
+com\filmoteka\service\LibraryService.class
+com\filmoteka\Main.class
+com\filmoteka\util\AppConfiguration.class
+com\filmoteka\service\Application.class
+com\filmoteka\ui\ColorPrinter.class
+com\filmoteka\service\ChoiceCollection.class
+com\filmoteka\ui\Menu.class
+com\filmoteka\model\Library.class
+com\filmoteka\model\Movie.class

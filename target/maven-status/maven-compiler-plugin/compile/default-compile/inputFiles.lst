@@ -1,9 +1,12 @@
-D:\Filmoteka\src\main\java\com\_3JLOYBOJLK\ColorPrinter.java
-D:\Filmoteka\src\main\java\com\_3JLOYBOJLK\Movie.java
-D:\Filmoteka\src\main\java\com\_3JLOYBOJLK\MovieCollection.java
-D:\Filmoteka\src\main\java\com\_3JLOYBOJLK\ConsoleColors.java
-D:\Filmoteka\src\main\java\com\_3JLOYBOJLK\Application.java
-D:\Filmoteka\src\main\java\com\_3JLOYBOJLK\Main.java
-D:\Filmoteka\src\main\java\com\_3JLOYBOJLK\CSVManager.java
-D:\Filmoteka\src\main\java\com\_3JLOYBOJLK\Menu.java
-D:\Filmoteka\src\main\java\com\_3JLOYBOJLK\Validators.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\model\Movie.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\ui\Menu.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\model\Library.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\Main.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\service\ValidationService.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\service\ChoiceCollection.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\ui\ConsoleColors.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\util\AppConfiguration.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\service\LibraryService.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\data\CsvDataManager.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\ui\ColorPrinter.java
+C:\Users\Vlad Tihomirov\IdeaProjects\Filmoteka\src\main\java\com\filmoteka\service\Application.java
